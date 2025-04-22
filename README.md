@@ -66,6 +66,7 @@ Content-Type: application/json
 
 "rohit"
 ```
+---
 ## 📝 Running Locally
 - Ensure MongoDB is running locally or via Docker.
 
@@ -75,7 +76,7 @@ Content-Type: application/json
 ```bash
 ./mvnw spring-boot:run
 ```
-
+---
 ## 🔄 Dependencies
 This service depends on:
 
