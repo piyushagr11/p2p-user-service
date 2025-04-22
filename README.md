@@ -1,46 +1,84 @@
-# User Service
+# 👤 User Service - P2P Chat App
 
-The **User Service** is a Spring Boot application that provides user authentication and management functionalities for a peer-to-peer chat application. It uses JWT for authentication and MongoDB as the database.
+This is the user profile and contacts microservice for the P2P Chat application. It manages user details, authenticated access to profile info, and contact management.
 
-## Features
+---
 
-- User authentication using JWT.
-- Secure password storage with BCrypt.
-- Role-based access control for API endpoints.
-- Reactive programming with Spring WebFlux.
-- MongoDB integration for user data storage.
+## 🚀 Features
 
-## Technologies Used
+- Retrieve logged-in user's profile (`/users/me`)
+- Add and view contacts
+- JWT-secured endpoints (uses token from `auth-service`)
+- Built using Spring WebFlux and Reactive MongoDB
+- Seamlessly integrates with `auth-service` and `chat-service`
 
-- **Java**: Programming language.
-- **Spring Boot**: Framework for building the application.
-- **Spring WebFlux**: Reactive programming support.
-- **Spring Security**: Security framework for authentication and authorization.
-- **MongoDB**: NoSQL database for storing user data.
-- **JWT**: JSON Web Tokens for stateless authentication.
-- **Maven**: Build and dependency management tool.
+---
 
-## Prerequisites
+## 🧰 Tech Stack
 
-- Java 17 or higher
-- Maven 3.8 or higher
-- MongoDB installed and running on `localhost:27017`
+- Spring Boot 3
+- Spring WebFlux
+- Spring Security (JWT-based)
+- Reactive MongoDB
+- Lombok
 
-## Configuration
+---
 
-The application configuration is stored in `src/main/resources/application.properties`. Update the following properties as needed:
+## 📦 API Endpoints
 
-```ini
-server.port=8082
-spring.data.mongodb.uri=mongodb://localhost:27017/p2p-auth
-jwt.secret=yoursupersecretkeywhichisverylong1231234567890
+| Method | Endpoint        | Description                      | Auth Required |
+|--------|------------------|----------------------------------|---------------|
+| GET    | `/users/me`      | Get current logged-in user info | ✅ Yes         |
+| GET    | `/contacts`      | Get list of contacts             | ✅ Yes         |
+| POST   | `/contacts`      | Add a new contact                | ✅ Yes         |
 
+---
+
+## 🔐 Authorization
+
+All endpoints require a valid JWT token (issued by `auth-service`).
+
+Include it in every request:
+```makefile
+Authorization: Bearer <token>
+```
+---
+## 📝 Example: Get My Profile
+
+```http
+GET /users/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+Response
+```json
+{
+  "id": "66255d79ab843f28b6c79531",
+  "username": "userName1",
+  "contacts": ["contactName1", "contactName2"]
+}
+```
+---
+## 📝 Example: Add Contact
+```http
+POST /contacts
+Authorization: Bearer <token>
+Content-Type: application/json
+
+"rohit"
+```
+## 📝 Running Locally
+- Ensure MongoDB is running locally or via Docker.
+
+- Make sure auth-service is running to provide tokens.
+
+- Run the service:
+```bash
+./mvnw spring-boot:run
 ```
 
-## API Endpoints
+## 🔄 Dependencies
+This service depends on:
 
-| Endpoint               | Method | Description                     | Authentication |
-|------------------------|--------|---------------------------------|----------------|
-| `/me`                 | GET    | Get current user details        | Required       |
-| `/users/**`           | CRUD   | Manage user resources           | Required       |
-| `/contacts/**`        | CRUD   | Manage user contacts            | Required       |
+- **auth-service** for JWT issuance
+
+- **chat-service** for real-time communication (uses usernames managed here)
